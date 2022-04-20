@@ -182,6 +182,7 @@
         var check_flag = true;
 
         continue_button.addEventListener("click", function() {
+            check_flag = true;
             for (var i=0; i<check_list.length; i++) {
                 if (document.getElementById(check_list[i]).value == "") {
                     check_flag = false;

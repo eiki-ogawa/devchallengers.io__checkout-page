@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+
+    <title>checkout-page</title>
+
+    <!-- Montserrat font -->
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+  
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="wrap">
+        <h1>Checkout</h1>
+        <div class="shopping">
+            <div class="item">
+                <div class="photo">
+                    <img src="photo/photo1.png">
+                </div>
+                <div class="detail">
+                    <p class="item-name">Vintage Backbag</p>
+                    <p class="dollar">$</p>
+                    <p class="money">54.99</p>
+                    <p class="discount">$94.99</p>
+                    <div class="count">
+                        <button type="button" id="minus" class="minus">ー</button>
+                        <p class="input">1</p>
+                        <button type="button" id="plus" class="plus">＋</button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="photo">
+                    <img src="photo/photo2.png">
+                </div>
+                <div class="detail">
+                    <p class="item-name">Levi Shoes</p>
+                    <p class="dollar">$</p>
+                    <p class="money">74.99</p>
+                    <p class="discount">$124.99</p>
+                    <div class="count">
+                        <button type="button" id="minus" class="minus">ー</button>
+                        <p class="input">1</p>
+                        <button type="button" id="plus" class="plus">＋</button>
+                    </div>
+                </div>
+            </div>
+            <div class="total-calc">
+                <hr width="320">
+                <p>Shipping</p>
+                <p class="money">19</p>
+                <p class="dollar">$</p>
+                <hr width="320">
+                <p>Total</p>
+                <p class="dollar">$<span id="total" class="total"></span></p>
+            </div>
+        </div>
+        <div class="information">
+            <label>Contact information</label>
+            <p class="input-label">E-mail</p>
+            <div class="input-item" id="email">
+                <input type="text" id="check-email" class="input-holder" placeholder="Enter your email...">
+            </div>
+            <p class="input-label">Phone</p>
+            <div class="input-item" id="phone">
+                <input type="text" id="check-phone" class="input-holder" placeholder="Enter your phone...">
+            </div>
+
+            <label class="shipping">Shipping address</label>
+            <p class="input-label">Full name</p>
+            <div class="input-item" id="account_circle">
+                <input type="text" id="check-account" class="input-holder" placeholder="Your name...">
+            </div>
+            <p class="input-label">Address</p>
+            <div class="input-item" id="home">
+                <input type="text" id="check-address" class="input-holder" placeholder="Your address...">
+            </div>
+            <p class="input-label">City</p>
+            <div class="input-item" id="location_city">
+                <input type="text" id="check-city" class="input-holder" placeholder="Your city...">
+            </div>
+
+            <div class="half">
+                <p class="input-label">Country</p>
+                <div class="input-item" id="public">
+                    <select id="check-country" class="input-half">
+                        <option value="">Your country...</option>
+                        <option value="japan">Japan</option>
+                        <option value="europe">Europe</option>
+                        <option value="rome">Rome</option>
+                    </select>
+                </div>
+            </div>
+            <div class="half" id="half">
+                <p class="input-label" id="half">Postal code</p>
+                <div class="input-item" id="work">
+                    <input type="text" id="check-work" class="input-half" placeholder="Your postal code...">
+                </div>
+            </div>
+            <div class="clear">
+                <label class="save">
+                    <input type="checkbox" class="checkbox">
+                    <p class="text">Save this information for next time</p>
+                </label>
+                <button id="continue" class="continue">Continue</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // <shopping>
+        // 金額
+        var amount;
+        // 個数
+        var quantity;
+        // 個数（＋ーボタンの関数用）
+        var count;
+        // 金額が書かれている要素のリスト
+        const money = document.getElementsByClassName("money");
+        // 合計金額を入力する要素
+        const total = document.getElementById("total");
+        // ＋ボタンの要素のリスト
+        const plus = document.getElementsByClassName("plus");
+        // ーボタンの要素のリスト
+        const minus = document.getElementsByClassName("minus");
+
+        // 合計金額を計算する関数
+        var total_count = function() {
+            // 金額の初期化
+            amount = 0;
+
+            for(let i = 0; i < money.length; i++) {
+                try {
+                    quantity = money[i].nextElementSibling.nextElementSibling.children[1].textContent;
+                    // 個数入力があった場合（ない場合はエラーが起こるのでキャッチする）
+                    if(quantity >= 1) {
+                        amount += Number(money[i].textContent) * quantity;
+                    }
+                } catch {
+                    amount += Number(money[i].textContent);
+                }
+
+            total.textContent = Math.round(amount * 100) / 100;
+            }
+        }
+        // 合計金額を計算
+        total_count();
+
+        // 全ての＋ボタンを操作するfor 文
+        for(let i = 0; i < plus.length; i++) {
+            plus[i].addEventListener("click", function() {
+                count = plus[i].previousElementSibling;
+                count.textContent ++;
+                // 合計金額を計算
+                total_count();
+            });}
+
+        // 全てのーボタンを操作するfor 文
+        for(let j = 0; j < minus.length; j++) {
+            minus[j].addEventListener("click", function() {
+            count = minus[j].nextElementSibling;
+            // 0以下はマイナスしない
+            if(count.textContent >= 1) {
+                count.textContent --;
+            }
+            // 合計金額を計算
+            total_count();
+        });}
+
+        // <information>
+        // 送信ボタン
+        const continue_button = document.getElementById("continue");
+        // チェックリスト
+        var check_list = ["check-email","check-phone","check-account","check-address","check-city","check-country","check-work"];
+        // チェック用フラッグ
+        var check_flag = true;
+
+        continue_button.addEventListener("click", function() {
+            for (var i=0; i<check_list.length; i++) {
+                if (document.getElementById(check_list[i]).value == "") {
+                    check_flag = false;
+                }
+            }
+            if (check_flag) {
+                alert("送信に成功しました。");
+            } else {
+                alert("未入力の項目があります。");
+            }
+        });
+
+    </script>
+</body>
+</html>
